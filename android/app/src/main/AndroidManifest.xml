@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -15,7 +16,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Eng Peng Contract Farmer Catching"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@drawable/ep_cf_catch_icon"
+        android:roundIcon="@drawable/ep_cf_catch_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

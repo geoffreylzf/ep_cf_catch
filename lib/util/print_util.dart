@@ -1,6 +1,7 @@
 import 'package:ep_cf_catch/db/dao/branch_dao.dart';
 import 'package:ep_cf_catch/db/dao/cf_catch_dao.dart';
 import 'package:ep_cf_catch/db/dao/cf_catch_detail_dao.dart';
+import 'package:ep_cf_catch/module/shared_preferences_module.dart';
 
 import 'date_time_util.dart';
 
@@ -20,6 +21,7 @@ class PrintUtil {
     final company = await BranchDao().getCompanyById(cfCatch.companyId);
     final location = await BranchDao().getLocationById(cfCatch.locationId);
     final houseList = await CfCatchDetailDao().getHouseListByCfCatchId(cfCatchId);
+    final user = await SharedPreferencesModule().getUser();
 
     s += _fmtLeftLine(company.branchName);
     s += _fmtLeftLine("Bill Timbangan Ayam");
@@ -117,7 +119,7 @@ class PrintUtil {
 
     s += _fmtLeftLine();
 
-    //TODO s += _fmtLeftLine("Printed by:");
+     s += _fmtLeftLine("Printed by: " + user.username);
 
     s += _fmtLeftLine("Date: " + DateTimeUtil().getCurrentDate());
     s += _fmtLeftLine("Time: " + DateTimeUtil().getCurrentTime());

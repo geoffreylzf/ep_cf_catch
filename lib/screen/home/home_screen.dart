@@ -7,6 +7,8 @@ import 'package:ep_cf_catch/res/string.dart';
 import 'package:ep_cf_catch/screen/catch_history/catch_history_screen.dart';
 import 'package:ep_cf_catch/screen/catching/catching_screen.dart';
 import 'package:ep_cf_catch/screen/home/home_bloc.dart';
+import 'package:ep_cf_catch/screen/upload/upload_screen.dart';
+import 'package:ep_cf_catch/widget/card_label_small.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -48,36 +50,51 @@ class _HomeBodyState extends State<HomeBody> {
       children: [
         Expanded(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              RaisedButton.icon(
-                onPressed: () {
-                  Navigator.pushNamed(context, CatchHistoryScreen.route);
-                },
-                icon: Icon(Icons.history),
-                label: Text(Strings.catchHistory.toUpperCase()),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      RaisedButton.icon(
+                        onPressed: () {
+                          Navigator.pushNamed(context, CatchHistoryScreen.route);
+                        },
+                        icon: Icon(Icons.history),
+                        label: Text(Strings.catchHistory.toUpperCase()),
+                      ),
+                      UploadCard(),
+                    ],
+                  ),
+                ),
               ),
-              RaisedButton.icon(
-                onPressed: () async {
-                  int companyId = await SharedPreferencesModule().getCompanyId();
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: RaisedButton.icon(
+                    onPressed: () async {
+                      int companyId = await SharedPreferencesModule().getCompanyId();
 
-                  if (companyId != null) {
-                    var company = await BranchDao().getCompanyById(companyId);
-                    if (company != null) {
-                      Navigator.pushNamed(
-                        context,
-                        CatchingScreen.route,
-                        arguments: companyId,
-                      );
-                    } else {
-                      bloc.showNoCompanyDialog();
-                    }
-                  } else {
-                    bloc.showNoCompanyDialog();
-                  }
-                },
-                icon: Icon(Icons.local_shipping),
-                label: Text(Strings.newCatching.toUpperCase()),
+                      if (companyId != null) {
+                        var company = await BranchDao().getCompanyById(companyId);
+                        if (company != null) {
+                          Navigator.pushNamed(
+                            context,
+                            CatchingScreen.route,
+                            arguments: companyId,
+                          );
+                        } else {
+                          bloc.showNoCompanyDialog();
+                        }
+                      } else {
+                        bloc.showNoCompanyDialog();
+                      }
+                    },
+                    icon: Icon(Icons.local_shipping),
+                    label: Text(Strings.newCatching.toUpperCase()),
+                  ),
+                ),
               ),
             ],
           ),
@@ -111,6 +128,65 @@ class _HomeBodyState extends State<HomeBody> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class UploadCard extends StatefulWidget {
+  @override
+  _UploadCardState createState() => _UploadCardState();
+}
+
+class _UploadCardState extends State<UploadCard> {
+  @override
+  Widget build(BuildContext context) {
+    final homeBloc = Provider.of<HomeBloc>(context);
+    homeBloc.loadNoUploadCount();
+    return Card(
+      color: Colors.white70,
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            CardLabelSmall(Strings.pendingUpload),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.cloud_upload,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: StreamBuilder<int>(
+                      stream: homeBloc.noUploadCountStream,
+                      initialData: 0,
+                      builder: (context, snapshot) {
+                        return Text(
+                          snapshot.data.toString(),
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: snapshot.data > 0
+                                ? Theme.of(context).accentColor
+                                : Theme.of(context).iconTheme.color,
+                          ),
+                        );
+                      }),
+                ),
+              ],
+            ),
+            RaisedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, UploadScreen.route);
+              },
+              child: Text(Strings.upload.toUpperCase()),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -35,6 +35,7 @@ class Strings {
   static const logout = "Logout";
   static const upload = "Upload";
   static const search = "Search";
+  static const pendingUpload = "Pending Upload";
   static const username = "Username";
   static const password = "Password";
 
