@@ -17,6 +17,7 @@ class Strings {
   static const coverQuantity = "Cover Quantity";
   static const truckCode = "Truck Code";
   static const referenceNumber = "Reference Number";
+  static const referenceNoSupplierNo = "Reference No (Supplier No)";
   static const housekeeping = "Housekeeping";
   static const status = "Status";
   static const name = "Name";

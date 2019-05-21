@@ -92,7 +92,7 @@ class _HeadEntryState extends State<HeadEntry> {
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: Strings.referenceNumber,
+              labelText: Strings.referenceNoSupplierNo,
             ),
           ),
         ),

@@ -32,6 +32,9 @@ class PrintUtil {
     s += _fmtLeftLine("Reference Number : " + cfCatch.refNo);
     s += _fmtLeftLine("UUID : " + cfCatch.uuid);
     s += _fmtLeftLine();
+    s += _fmtLeftLine("Umur : ");
+    s += _fmtLeftLine("Ayam : ______________________");
+    s += _fmtLeftLine();
 
     s += _fmtLeftLine(_halfLine("Stock Description") + "|" + _halfLine("Stock Description"));
     s += _fmtLeftLine(_halfLineSeparator);
