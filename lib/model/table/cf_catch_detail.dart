@@ -1,13 +1,14 @@
 import 'package:ep_cf_catch/model/table/temp_cf_catch_detail.dart';
 
 class CfCatchDetail {
-  int id, cfCatchId, houseNo, qty, cageQty, coverQty, isBt;
+  int id, cfCatchId, houseNo, age, qty, cageQty, coverQty, isBt;
   double weight;
 
   CfCatchDetail({
     this.id,
     this.cfCatchId,
     this.houseNo,
+    this.age,
     this.qty,
     this.cageQty,
     this.coverQty,
@@ -18,6 +19,7 @@ class CfCatchDetail {
   CfCatchDetail.db({
     this.cfCatchId,
     this.houseNo,
+    this.age,
     this.qty,
     this.cageQty,
     this.coverQty,
@@ -29,6 +31,7 @@ class CfCatchDetail {
         id: json["id"],
         cfCatchId: json["cf_catch_id"],
         houseNo: json["house_no"],
+        age: json["age"],
         qty: json["qty"],
         weight: json["weight"],
         cageQty: json["cage_qty"],
@@ -40,6 +43,7 @@ class CfCatchDetail {
         "id": id,
         "cf_catch_id": cfCatchId,
         "house_no": houseNo,
+        "age": age,
         "qty": qty,
         "weight": weight,
         "cage_qty": cageQty,
@@ -55,6 +59,7 @@ class CfCatchDetail {
       detailList.add(CfCatchDetail.db(
           cfCatchId: cfCatchId,
           houseNo: temp.houseNo,
+          age: temp.age,
           qty: temp.qty,
           cageQty: temp.cageQty,
           coverQty: temp.coverQty,

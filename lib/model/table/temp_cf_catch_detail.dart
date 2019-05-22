@@ -1,10 +1,11 @@
 class TempCfCatchDetail {
-  int id, houseNo, qty, cageQty, coverQty, isBt;
+  int id, houseNo, age, qty, cageQty, coverQty, isBt;
   double weight;
 
   TempCfCatchDetail({
     this.id,
     this.houseNo,
+    this.age,
     this.qty,
     this.weight,
     this.cageQty,
@@ -16,6 +17,7 @@ class TempCfCatchDetail {
       TempCfCatchDetail(
         id: json["id"],
         houseNo: json["house_no"],
+        age: json["age"],
         qty: json["qty"],
         weight: json["weight"],
         cageQty: json["cage_qty"],
@@ -26,6 +28,7 @@ class TempCfCatchDetail {
   Map<String, dynamic> toJson() => {
         "id": id,
         "house_no": houseNo,
+        "age": age,
         "qty": qty,
         "weight": weight,
         "cage_qty": cageQty,

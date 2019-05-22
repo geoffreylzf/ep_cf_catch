@@ -67,10 +67,10 @@ class _CatchingDetailScreenState extends State<CatchingDetailScreen>
             children: [
               Row(
                 children: [
-                  Expanded(flex: 1, child: TempList()),
+                  Expanded(flex: 3, child: TempList()),
                   VerticalDivider(width: 0),
                   Expanded(
-                      flex: 2,
+                      flex: 7,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: DetailEntry(),

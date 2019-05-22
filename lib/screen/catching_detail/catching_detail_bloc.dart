@@ -103,12 +103,17 @@ class CatchingDetailBloc extends BlocBase {
     return location.branchCode + " - " + location.branchName;
   }
 
-  Future<bool> insertDetail(int house, double weight, int qty) async {
+  Future<bool> insertDetail(int house, int age, double weight, int qty) async {
     final cageQty = _cageQtySubject.value;
     final coverQty = _coverQtySubject.value;
     if (house == null) {
       _simpleAlertDialogMixin.onDialogMessage(
           Strings.error, "Please enter house");
+      return false;
+    }
+    if (age == null) {
+      _simpleAlertDialogMixin.onDialogMessage(
+          Strings.error, "Please enter age");
       return false;
     }
     if (weight == null) {
@@ -134,6 +139,7 @@ class CatchingDetailBloc extends BlocBase {
     final isBt = _isWeighingByBtSubject.value ? 1 : 0;
     final temp = TempCfCatchDetail(
       houseNo: house,
+      age: age,
       weight: weight,
       qty: qty,
       cageQty: cageQty,

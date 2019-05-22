@@ -6,6 +6,8 @@ import 'package:ep_cf_catch/model/table/cf_catch.dart';
 import 'package:ep_cf_catch/res/string.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter/services.dart';
 
 class CatchingBloc extends BlocBase {
   final _locListSubject = BehaviorSubject<List<Branch>>();
@@ -58,10 +60,7 @@ class CatchingBloc extends BlocBase {
       _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please enter truck code");
       return null;
     }
-    if (refNo == null || refNo == "") {
-      _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please enter reference number");
-      return null;
-    }
+
     return CfCatch(
         companyId: _companyId,
         locationId: _selectedLocationIdSubject.value,
@@ -77,9 +76,54 @@ class CatchingBloc extends BlocBase {
     var locationId = _selectedLocationIdSubject.value;
     if (locationId != null) {
       var isContained = locList.map((b) => b.id).contains(locationId);
-      if(!isContained){
+      if (!isContained) {
         setLocationId(null);
       }
     }
   }
+
+  Future<ScanResult> scan() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      var strList = barcode.split("|");
+      if (strList.length < 7) {
+        _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Invalid barcode");
+        return ScanResult(isSuccess: false);
+      }
+
+      //int companyId = int.tryParse(strList[0]);
+      int locationId = int.tryParse(strList[1]);
+      String date = strList[2];
+      int docNo = int.tryParse(strList[3]);
+      //String docType = strList[4];
+      //String type = strList[5];
+      String truckNo = strList[6];
+
+      return ScanResult(
+        isSuccess: true,
+        date: date,
+        docNo: docNo,
+        truckNo: truckNo,
+      );
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please grant camera permission");
+      } else {
+        _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Unknown error: $e");
+      }
+    } on FormatException {
+      //User return using back button
+    } catch (e) {
+      _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Unknown error: $e");
+    }
+    return ScanResult(isSuccess: false);
+  }
+}
+
+class ScanResult {
+  final bool isSuccess;
+  int docNo;
+  String date, truckNo;
+
+  ScanResult({this.isSuccess, this.date, this.docNo, this.truckNo});
 }

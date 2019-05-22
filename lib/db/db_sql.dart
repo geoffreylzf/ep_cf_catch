@@ -28,6 +28,7 @@ class DbSql {
       `id` INTEGER PRIMARY KEY AUTOINCREMENT,
       `cf_catch_id` INTEGER,
       `house_no` INTEGER,
+      `age` INTEGER,
       `weight` REAL,
       `qty` INTEGER,
       `cage_qty` INTEGER,
@@ -39,6 +40,7 @@ class DbSql {
       CREATE TABLE `temp_cf_catch_detail` (
       `id` INTEGER PRIMARY KEY AUTOINCREMENT,
       `house_no` INTEGER,
+      `age` INTEGER,
       `weight` REAL,
       `qty` INTEGER,
       `cage_qty` INTEGER,

@@ -24,9 +24,7 @@ class CfCatchDetailDao {
       whereArgs: [cfCatchId],
       orderBy: "id DESC",
     );
-    return res.isNotEmpty
-        ? res.map((c) => CfCatchDetail.fromJson(c)).toList()
-        : [];
+    return res.isNotEmpty ? res.map((c) => CfCatchDetail.fromJson(c)).toList() : [];
   }
 
   Future<List<int>> getHouseListByCfCatchId(int cfCatchId) async {
@@ -38,15 +36,10 @@ class CfCatchDetailDao {
       whereArgs: [cfCatchId],
       orderBy: "house_no",
     );
-    return res.isNotEmpty
-        ? res.map((c) {
-            return c["house_no"] as int;
-          }).toList()
-        : [];
+    return res.isNotEmpty ? res.map((c) => c["house_no"] as int).toList() : [];
   }
 
-  Future<List<CfCatchDetail>> getListByCfCatchIdHouseNo(
-      int cfCatchId, int houseNo) async {
+  Future<List<CfCatchDetail>> getListByCfCatchIdHouseNo(int cfCatchId, int houseNo) async {
     final db = await Db().database;
     final res = await db.query(
       _table,
@@ -54,8 +47,18 @@ class CfCatchDetailDao {
       whereArgs: [cfCatchId, houseNo],
       orderBy: "id DESC",
     );
-    return res.isNotEmpty
-        ? res.map((c) => CfCatchDetail.fromJson(c)).toList()
-        : [];
+    return res.isNotEmpty ? res.map((c) => CfCatchDetail.fromJson(c)).toList() : [];
+  }
+
+  Future<List<int>> getAgeListByCfCatchIdHouseNo(int cfCatchId, int houseNo) async {
+    final db = await Db().database;
+    final res = await db.query(
+      _table,
+      columns: ["DISTINCT(age) as age"],
+      where: "cf_catch_id = ? AND house_no = ?",
+      whereArgs: [cfCatchId, houseNo],
+      orderBy: "age",
+    );
+    return res.isNotEmpty ? res.map((c) => c["age"] as int).toList() : [];
   }
 }

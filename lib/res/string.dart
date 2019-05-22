@@ -11,13 +11,14 @@ class Strings {
   static const recordDate = "Record Date";
   static const documentNumber = "Document Number";
   static const houseCode = "House Code";
+  static const age = "Age";
   static const weightKg = "Weight (Kg)";
   static const quantity = "Quantity";
   static const cageQuantity = "Cage Quantity";
   static const coverQuantity = "Cover Quantity";
   static const truckCode = "Truck Code";
   static const referenceNumber = "Reference Number";
-  static const referenceNoSupplierNo = "Reference No (Supplier No)";
+  static const reference = "Reference";
   static const housekeeping = "Housekeeping";
   static const status = "Status";
   static const name = "Name";

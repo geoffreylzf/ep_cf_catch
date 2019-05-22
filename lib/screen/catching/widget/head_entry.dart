@@ -24,7 +24,6 @@ class _HeadEntryState extends State<HeadEntry> {
     dateTec.text = dateFormat.format(recordDate);
   }
 
-
   @override
   void dispose() {
     dateTec.dispose();
@@ -38,6 +37,7 @@ class _HeadEntryState extends State<HeadEntry> {
   Widget build(BuildContext context) {
     final bloc = Provider.of<CatchingBloc>(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
           controller: dateTec,
@@ -92,7 +92,7 @@ class _HeadEntryState extends State<HeadEntry> {
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText: Strings.referenceNoSupplierNo,
+              labelText: Strings.reference,
             ),
           ),
         ),
@@ -107,8 +107,7 @@ class _HeadEntryState extends State<HeadEntry> {
                 final docNo = docNoTec.text;
                 final truckNo = truckNoTec.text;
                 final refNo = refNoTec.text;
-                final cfCatch =
-                    bloc.validateEntry(recordDate, docNo, truckNo, refNo);
+                final cfCatch = bloc.validateEntry(recordDate, docNo, truckNo, refNo);
                 if (cfCatch != null) {
                   Navigator.pushNamed(
                     context,
@@ -120,6 +119,14 @@ class _HeadEntryState extends State<HeadEntry> {
             ),
           ),
         ),
+        /*Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FloatingActionButton(
+              child: Icon(Icons.settings_overscan),
+              onPressed: () async {
+                ScanResult scanResult = await bloc.scan();
+              }),
+        )*/
       ],
     );
   }

@@ -81,6 +81,7 @@ class _CatchSummaryState extends State<CatchSummary> {
               children: [
                 Expanded(flex: 1, child: ListHeader("#")),
                 Expanded(flex: 1, child: ListHeader("House")),
+                Expanded(flex: 1, child: ListHeader("Age")),
                 Expanded(flex: 1, child: ListHeader("Qty")),
                 Expanded(flex: 3, child: ListHeader(Strings.weightKg)),
                 Expanded(flex: 1, child: ListHeader("Cage (Cover)")),
@@ -159,6 +160,10 @@ class _CatchSummaryState extends State<CatchSummary> {
                               Expanded(
                                   flex: 1,
                                   child: Text(temp.houseNo.toString(),
+                                      textAlign: TextAlign.center)),
+                              Expanded(
+                                  flex: 1,
+                                  child: Text(temp.age.toString(),
                                       textAlign: TextAlign.center)),
                               Expanded(
                                   flex: 1,

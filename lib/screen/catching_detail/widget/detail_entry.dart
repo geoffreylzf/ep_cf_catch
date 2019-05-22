@@ -12,6 +12,7 @@ class DetailEntry extends StatefulWidget {
 
 class _DetailEntryState extends State<DetailEntry> {
   var houseNoTec = TextEditingController();
+  var ageTec = TextEditingController();
   var weightTec = TextEditingController();
   var qtyTec = TextEditingController();
   var weightFn = FocusNode();
@@ -26,6 +27,7 @@ class _DetailEntryState extends State<DetailEntry> {
   @override
   void dispose() {
     houseNoTec.dispose();
+    ageTec.dispose();
     weightTec.dispose();
     qtyTec.dispose();
     weightFn.dispose();
@@ -51,14 +53,24 @@ class _DetailEntryState extends State<DetailEntry> {
                     prefixIcon: Icon(Icons.home)),
               ),
             ),
-            Container(
-              width: 16,
+            Container(width: 8),
+            Expanded(
+              child: TextField(
+                controller: ageTec,
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: Strings.age,
+                    contentPadding: const EdgeInsets.all(8),
+                    prefixIcon: Icon(FontAwesomeIcons.hashtag)),
+              ),
             ),
+            Container(width: 8),
             Expanded(
               child: TextField(
                 controller: qtyTec,
                 keyboardType: TextInputType.number,
-                autofocus: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: Strings.quantity,
@@ -201,10 +213,11 @@ class _DetailEntryState extends State<DetailEntry> {
               label: Text(Strings.save.toUpperCase()),
               onPressed: () async {
                 final house = int.tryParse(houseNoTec.text);
+                final age = int.tryParse(ageTec.text);
                 final weight = double.tryParse(weightTec.text);
                 final qty = int.tryParse(qtyTec.text);
 
-                var res = await bloc.insertDetail(house, weight, qty);
+                var res = await bloc.insertDetail(house, age, weight, qty);
                 if (res) {
                   resetWeightField(bloc);
                 }

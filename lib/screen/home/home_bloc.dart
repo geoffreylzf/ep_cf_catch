@@ -7,17 +7,21 @@ import 'package:ep_cf_catch/module/shared_preferences_module.dart';
 import 'package:ep_cf_catch/res/string.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:package_info/package_info.dart';
 
 class HomeBloc extends BlocBase{
   final _companySubject = BehaviorSubject<Branch>();
+  final _packageInfoSubject = BehaviorSubject<PackageInfo>();
   final _noUploadCountSubject = BehaviorSubject<int>();
 
   Stream<Branch> get companyStream => _companySubject.stream;
+  Stream<PackageInfo> get packageInfoStream => _packageInfoSubject.stream;
   Stream<int> get noUploadCountStream => _noUploadCountSubject.stream;
 
   @override
   void dispose() {
     _companySubject.close();
+    _packageInfoSubject.close();
     _noUploadCountSubject.close();
   }
 
@@ -27,6 +31,7 @@ class HomeBloc extends BlocBase{
     _simpleAlertDialogMixin = mixin;
     loadCompany();
     loadNoUploadCount();
+    _loadPackageInfo();
   }
 
   loadCompany() async {
@@ -38,6 +43,10 @@ class HomeBloc extends BlocBase{
 
   loadNoUploadCount() async {
     _noUploadCountSubject.add(await UtilDao().getNoUploadCount());
+  }
+
+  _loadPackageInfo() async {
+    _packageInfoSubject.add(await PackageInfo.fromPlatform());
   }
 
   showNoCompanyDialog() {

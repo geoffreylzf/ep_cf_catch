@@ -36,7 +36,6 @@ class PrintUtil {
     s += _fmtLeftLine("Ayam : ______________________");
     s += _fmtLeftLine();
 
-    s += _fmtLeftLine(_halfLine("Stock Description") + "|" + _halfLine("Stock Description"));
     s += _fmtLeftLine(_halfLineSeparator);
 
     var ttlWeight = 0.00;
@@ -45,7 +44,10 @@ class PrintUtil {
     var ttlCover = 0;
 
     await Future.forEach(houseList, (house) async {
-      s += _fmtLeftLine(_halfLine(" Kdg#: ${location.branchCode} $house") + "|" + _halfLine(" Kdg#: ${location.branchCode} $house"));
+
+      final ageList = await CfCatchDetailDao().getAgeListByCfCatchIdHouseNo(cfCatchId, house);
+
+      s += _fmtLeftLine(" Kdg#: ${location.branchCode} $house (Age : ${ageList.map((i)=> i.toString()).join(",")})");
       s += _fmtLeftLine(_halfLineSeparator);
       s += _fmtLeftLine(_halfLine("  #    Weight  Qty  C ") + "|" + _halfLine("  #    Weight  Qty  C "));
 
@@ -89,11 +91,11 @@ class PrintUtil {
 
             rightLine = " $no2$weight2$qty2$cover2";
           }
+
+          s += _fmtLeftLine(_halfLine(leftLine) + "|" + _halfLine(rightLine));
         }
-
-        s += _fmtLeftLine(_halfLine(leftLine) + "|" + _halfLine(rightLine));
       }
-
+      s += _fmtLeftLine(_halfLine() + "|" + _halfLine());
       s += _fmtLeftLine(_halfLine(" WGT: ${ttlHouseWeight.toStringAsFixed(2)} Kg") + "|" + _halfLine(" QTY: $ttlHouseQty heads"));
       s += _fmtLeftLine(_halfLineSeparator);
     });

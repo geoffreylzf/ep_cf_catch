@@ -10,6 +10,7 @@ import 'package:ep_cf_catch/screen/home/home_bloc.dart';
 import 'package:ep_cf_catch/screen/upload/upload_screen.dart';
 import 'package:ep_cf_catch/widget/card_label_small.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -125,6 +126,19 @@ class _HomeBodyState extends State<HomeBody> {
                     ],
                   );
                 }),
+            trailing: StreamBuilder<PackageInfo>(
+              stream: bloc.packageInfoStream,
+              builder: (ctx, snapshot) {
+                var ver = "";
+                if (snapshot.hasData) {
+                  ver = snapshot.data.version;
+                }
+                return Text(
+                  "Version " + ver,
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                );
+              },
+            ),
           ),
         ),
       ],
