@@ -30,6 +30,12 @@ class _CatchingDetailScreenState extends State<CatchingDetailScreen>
     super.initState();
     bluetoothBloc = BluetoothBloc(mixin: this, type: BluetoothType.Weighing);
     _tabController = TabController(vsync: this, length: 2);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging && _tabController.index == 1) {
+        //Dismiss keyboard
+        FocusScope.of(context).requestFocus(new FocusNode());
+      }
+    });
   }
 
   @override

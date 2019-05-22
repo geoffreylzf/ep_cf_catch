@@ -2,7 +2,7 @@ import 'package:ep_cf_catch/bloc/bloc.dart';
 import 'package:ep_cf_catch/module/shared_preferences_module.dart';
 import 'package:rxdart/rxdart.dart';
 
-class LocalBloc extends BlocBase{
+class LocalBloc extends BlocBase {
   final _localCheckedSubject = BehaviorSubject<bool>();
 
   Stream<bool> get localCheckedStream => _localCheckedSubject.stream;
@@ -17,8 +17,7 @@ class LocalBloc extends BlocBase{
   }
 
   loadLocalChecked() async {
-    _localCheckedSubject
-        .add(await SharedPreferencesModule().getLocalCheck() ?? false);
+    _localCheckedSubject.add(await SharedPreferencesModule().getLocalCheck() ?? false);
   }
 
   setLocalChecked(bool b) async {

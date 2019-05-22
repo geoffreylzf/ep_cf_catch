@@ -39,41 +39,53 @@ class _HeadEntryState extends State<HeadEntry> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextField(
-          controller: dateTec,
-          enableInteractiveSelection: false,
-          focusNode: AlwaysDisabledFocusNode(),
-          onTap: () async {
-            final selectedDate = await showDatePicker(
-              context: context,
-              initialDate: recordDate,
-              firstDate: DateTime(2010),
-              lastDate: DateTime(2050),
-            );
+        StreamBuilder<bool>(
+            stream: bloc.isScanStream,
+            initialData: false,
+            builder: (context, snapshot) {
+              return Column(
+                children: <Widget>[
+                  TextField(
+                    enabled: !snapshot.data,
+                    controller: dateTec,
+                    enableInteractiveSelection: false,
+                    focusNode: AlwaysDisabledFocusNode(),
+                    onTap: () async {
+                      final selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: recordDate,
+                        firstDate: DateTime(2010),
+                        lastDate: DateTime(2050),
+                      );
 
-            if (selectedDate != null) {
-              recordDate = selectedDate;
-              dateTec.text = dateFormat.format(selectedDate);
-            }
-          },
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            suffixIcon: Icon(Icons.date_range),
-            labelText: Strings.recordDate,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 16),
-          child: TextField(
-            controller: docNoTec,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: Strings.documentNumber,
-            ),
-          ),
-        ),
+                      if (selectedDate != null) {
+                        recordDate = selectedDate;
+                        dateTec.text = dateFormat.format(selectedDate);
+                      }
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.date_range),
+                      labelText: Strings.recordDate,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: TextField(
+                      enabled: !snapshot.data,
+                      controller: docNoTec,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: Strings.documentNumber,
+                      ),
+                    ),
+                  ),
+
+                ],
+              );
+            }),
         Padding(
           padding: const EdgeInsets.only(top: 16),
           child: TextField(
@@ -103,11 +115,11 @@ class _HeadEntryState extends State<HeadEntry> {
             child: RaisedButton(
               child: Text(Strings.start.toUpperCase()),
               onPressed: () {
-                final recordDate = dateTec.text;
+                final date = dateTec.text;
                 final docNo = docNoTec.text;
                 final truckNo = truckNoTec.text;
                 final refNo = refNoTec.text;
-                final cfCatch = bloc.validateEntry(recordDate, docNo, truckNo, refNo);
+                final cfCatch = bloc.validateEntry(date, docNo, truckNo, refNo);
                 if (cfCatch != null) {
                   Navigator.pushNamed(
                     context,
@@ -119,14 +131,43 @@ class _HeadEntryState extends State<HeadEntry> {
             ),
           ),
         ),
-        /*Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: FloatingActionButton(
-              child: Icon(Icons.settings_overscan),
-              onPressed: () async {
-                ScanResult scanResult = await bloc.scan();
-              }),
-        )*/
+        StreamBuilder<bool>(
+            stream: bloc.isScanStream,
+            initialData: false,
+            builder: (context, snapshot) {
+              return Column(
+                children: <Widget>[
+                  if (!snapshot.data)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FloatingActionButton(
+                        child: Icon(Icons.settings_overscan),
+                        onPressed: () async {
+                          ScanResult scanResult = await bloc.scan();
+                          if (scanResult.isSuccess == true) {
+                            dateTec.text = scanResult.date;
+                            docNoTec.text = scanResult.docNo.toString();
+                            truckNoTec.text = scanResult.truckNo;
+                          }
+                        },
+                      ),
+                    ),
+                  if (snapshot.data)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FloatingActionButton(
+                        child: Icon(Icons.refresh),
+                        onPressed: () async {
+                          bloc.refresh();
+                          dateTec.text = dateFormat.format(recordDate);
+                          docNoTec.clear();
+                          truckNoTec.clear();
+                        },
+                      ),
+                    ),
+                ],
+              );
+            }),
       ],
     );
   }

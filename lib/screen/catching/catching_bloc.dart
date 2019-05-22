@@ -12,15 +12,19 @@ import 'package:flutter/services.dart';
 class CatchingBloc extends BlocBase {
   final _locListSubject = BehaviorSubject<List<Branch>>();
   final _selectedLocationIdSubject = BehaviorSubject<int>();
+  final _isScanSubject = BehaviorSubject<bool>.seeded(false);
 
   Stream<List<Branch>> get locListStream => _locListSubject.stream;
 
   Stream<int> get selectedLocationIdStream => _selectedLocationIdSubject.stream;
 
+  Stream<bool> get isScanStream => _isScanSubject.stream;
+
   @override
   void dispose() {
     _locListSubject.close();
     _selectedLocationIdSubject.close();
+    _isScanSubject.close();
   }
 
   SimpleAlertDialogMixin _simpleAlertDialogMixin;
@@ -87,7 +91,7 @@ class CatchingBloc extends BlocBase {
       String barcode = await BarcodeScanner.scan();
       var strList = barcode.split("|");
       if (strList.length < 7) {
-        _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Invalid barcode");
+        _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Invalid barcode (length < 7)");
         return ScanResult(isSuccess: false);
       }
 
@@ -98,6 +102,18 @@ class CatchingBloc extends BlocBase {
       //String docType = strList[4];
       //String type = strList[5];
       String truckNo = strList[6];
+
+      var location = await BranchDao().getLocationById(locationId);
+
+      if (location == null) {
+        _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Invalid barcode (location not exist)");
+        return ScanResult(isSuccess: false);
+      }
+
+      _locListSubject.add([location]);
+      _selectedLocationIdSubject.add(locationId);
+
+      _isScanSubject.add(true);
 
       return ScanResult(
         isSuccess: true,
@@ -117,6 +133,12 @@ class CatchingBloc extends BlocBase {
       _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Unknown error: $e");
     }
     return ScanResult(isSuccess: false);
+  }
+
+  refresh() {
+    _isScanSubject.add(false);
+    _loadLocList("");
+    _selectedLocationIdSubject.add(null);
   }
 }
 

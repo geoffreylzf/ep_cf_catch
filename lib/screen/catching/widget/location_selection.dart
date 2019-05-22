@@ -38,14 +38,21 @@ class _LocationSelectionState extends State<LocationSelection> {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: searchTec,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: Strings.search,
-              contentPadding: const EdgeInsets.all(8.0),
-            ),
+          child: StreamBuilder<bool>(
+            stream: bloc.isScanStream,
+            initialData: false,
+            builder: (context, snapshot) {
+              return TextField(
+                enabled: !snapshot.data,
+                controller: searchTec,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: Strings.search,
+                  contentPadding: const EdgeInsets.all(8.0),
+                ),
+              );
+            }
           ),
         ),
         Expanded(
