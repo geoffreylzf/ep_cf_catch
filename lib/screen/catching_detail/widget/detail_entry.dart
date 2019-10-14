@@ -10,12 +10,18 @@ class DetailEntry extends StatefulWidget {
   _DetailEntryState createState() => _DetailEntryState();
 }
 
-class _DetailEntryState extends State<DetailEntry> {
+class _DetailEntryState extends State<DetailEntry> with AutomaticKeepAliveClientMixin{
   var houseNoTec = TextEditingController();
   var ageTec = TextEditingController();
   var weightTec = TextEditingController();
   var qtyTec = TextEditingController();
   var weightFn = FocusNode();
+
+
+  @override
+  bool get wantKeepAlive {
+    return true;
+  }
 
   @override
   void initState() {

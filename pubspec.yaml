@@ -1,13 +1,7 @@
 name: ep_cf_catch
 description: A new Flutter application.
 
-version: 1.1.0+6
-
-#1.0.1+2 adjust layout
-#1.0.2+3 adjust layout2
-#1.0.3+4 add age
-#1.0.4+5 debug print
-#1.1.0+6 add scan function
+version: 1.1.1+7
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -37,3 +31,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+#1.1.1+7 prevent catching tab from refresh when switching
+#1.1.0+6 add scan function
+#1.0.4+5 debug print
+#1.0.3+4 add age
+#1.0.2+3 adjust layout2
+#1.0.1+2 adjust layout
