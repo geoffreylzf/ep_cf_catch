@@ -12,8 +12,8 @@ import 'package:ep_cf_catch/model/temp_total.dart';
 import 'package:ep_cf_catch/res/string.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:vibrate/vibrate.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vibration/vibration.dart';
 
 class CatchingDetailBloc extends BlocBase {
   final _cfCatchSubject = BehaviorSubject<CfCatch>();
@@ -149,7 +149,9 @@ class CatchingDetailBloc extends BlocBase {
 
     await TempCfCatchDetailDao().insert(temp);
     await _loadTempList();
-    Vibrate.vibrate();
+    if (Vibration.hasVibrator() != null) {
+      Vibration.vibrate();
+    }
     return true;
   }
 

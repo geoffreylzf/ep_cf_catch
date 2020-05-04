@@ -17,7 +17,7 @@ class ApiModule {
   ApiModule._internal();
 
   static const _globalUrl =
-      "http://epgroup.dlinkddns.com:5030/eperp/index.php?r=";
+      "http://epgroup.dyndns.org:8833/eperp/index.php?r=";
   static const _localUrl = "http://192.168.8.1:8833/eperp/index.php?r=";
 
   static const _loginModule = "apiMobileAuth/login";
