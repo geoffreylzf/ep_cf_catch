@@ -11,6 +11,7 @@ import 'package:ep_cf_catch/screen/home/home_screen.dart';
 import 'package:ep_cf_catch/screen/housekeeping/housekeeping_screen.dart';
 import 'package:ep_cf_catch/screen/login/login_screen.dart';
 import 'package:ep_cf_catch/screen/print_preview/print_preview_screen.dart';
+import 'package:ep_cf_catch/screen/update_app_ver/update_app_ver_screen.dart';
 import 'package:ep_cf_catch/screen/upload/upload_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +43,7 @@ class App extends StatelessWidget {
         HousekeepingScreen.route: (ctx) => HousekeepingScreen(),
         CompanyScreen.route: (ctx) => CompanyScreen(),
         UploadScreen.route: (ctx) => UploadScreen(),
+        UpdateAppVerScreen.route: (ctx) => UpdateAppVerScreen(),
         CatchHistoryScreen.route: (ctx) => CatchHistoryScreen(),
         CatchingScreen.route: (ctx) {
           var companyId = ModalRoute.of(ctx).settings.arguments as int;

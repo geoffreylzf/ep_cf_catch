@@ -6,6 +6,7 @@ import 'package:ep_cf_catch/res/string.dart';
 import 'package:ep_cf_catch/screen/company/company_screen.dart';
 import 'package:ep_cf_catch/screen/housekeeping/housekeeping_screen.dart';
 import 'package:ep_cf_catch/screen/login/login_screen.dart';
+import 'package:ep_cf_catch/screen/update_app_ver/update_app_ver_screen.dart';
 import 'package:ep_cf_catch/screen/upload/upload_screen.dart';
 import 'package:ep_cf_catch/widget/simple_alert_dialog.dart';
 import 'package:ep_cf_catch/widget/simple_confirm_dialog.dart';
@@ -78,7 +79,15 @@ class NavDrawerStart extends StatelessWidget {
               Navigator.pushNamed(mainContext, UploadScreen.route);
             },
           ),
-
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.update),
+            title: Text("Update App Version"),
+            onTap: () {
+              Navigator.pop(mainContext);
+              Navigator.pushNamed(mainContext, UpdateAppVerScreen.route);
+            },
+          ),
           Divider(),
           ListTile(
             leading: Icon(Icons.exit_to_app),

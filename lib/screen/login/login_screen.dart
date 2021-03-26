@@ -88,7 +88,6 @@ class _LoginFormState extends State<LoginForm> {
                       }),
                 ],
               ),
-              GoogleSignInBtn()
             ],
           ),
         ));
@@ -126,26 +125,6 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
         if (value.isEmpty) {
           return Strings.msgPleaseEnterPassword;
         }
-      },
-    );
-  }
-}
-
-class GoogleSignInBtn extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final _loginBloc = Provider.of<LoginBloc>(context);
-    return StreamBuilder<String>(
-      stream: _loginBloc.textBtnGoogleStream,
-      initialData: Strings.msgSignInWithGoogle,
-      builder: (context, snapshot) {
-        return GoogleSignInButton(
-          darkMode: true,
-          onPressed: () {
-            _loginBloc.onGoogleButtonPressed();
-          },
-          text: snapshot.data,
-        );
       },
     );
   }

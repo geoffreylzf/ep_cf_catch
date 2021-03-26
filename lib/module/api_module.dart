@@ -20,7 +20,7 @@ class ApiModule {
       "http://epgroup.dyndns.org:8833/eperp/index.php?r=";
   static const _localUrl = "http://192.168.8.1:8833/eperp/index.php?r=";
 
-  static const _loginModule = "apiMobileAuth/login";
+  static const _loginModule = "apiMobileAuth/NonGoogleAccLogin";
   static const _housekeepingModule = "apiMobileCfCatch/getHouseKeeping";
   static const _uploadModule = "apiMobileCfCatch/upload";
 
@@ -51,13 +51,12 @@ class ApiModule {
   }
 
   Future<ApiResponse<Auth>> login(
-      String username, String password, String email) async {
+      String username, String password) async {
     String basicAuth = User(username, password).getCredential();
 
     final response = await http.post(
       await constructUrl(_loginModule),
       headers: {'authorization': basicAuth},
-      body: {"email": email},
     );
 
     return ApiResponse.fromJson(jsonDecode(validateResponse(response)));
