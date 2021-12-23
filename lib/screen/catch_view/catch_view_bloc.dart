@@ -2,24 +2,31 @@ import 'package:ep_cf_catch/bloc/bloc.dart';
 import 'package:ep_cf_catch/db/dao/branch_dao.dart';
 import 'package:ep_cf_catch/db/dao/cf_catch_dao.dart';
 import 'package:ep_cf_catch/db/dao/cf_catch_detail_dao.dart';
+import 'package:ep_cf_catch/db/dao/cf_catch_worker_dao.dart';
 import 'package:ep_cf_catch/model/table/cf_catch.dart';
 import 'package:ep_cf_catch/model/table/cf_catch_detail.dart';
+import 'package:ep_cf_catch/model/table/cf_catch_worker.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CatchViewBloc extends BlocBase {
   final _cfCatchSubject = BehaviorSubject<CfCatch>();
   final _cfCatchDetailListSubject = BehaviorSubject<List<CfCatchDetail>>();
+  final _cfCatchWorkerListSubject = BehaviorSubject<List<CfCatchWorker>>();
 
   Stream<CfCatch> get cfCatchStream => _cfCatchSubject.stream;
 
   Stream<List<CfCatchDetail>> get cfCatchDetailListStream =>
       _cfCatchDetailListSubject.stream;
 
+  Stream<List<CfCatchWorker>> get cfCatchWorkerListStream =>
+      _cfCatchWorkerListSubject.stream;
+
   @override
   void dispose() {
     _cfCatchSubject.close();
     _cfCatchDetailListSubject.close();
+    _cfCatchWorkerListSubject.close();
   }
 
   int _cfCatchId;
@@ -33,6 +40,8 @@ class CatchViewBloc extends BlocBase {
     _loadCfCatch();
     _cfCatchDetailListSubject
         .add(await CfCatchDetailDao().getListByCfCatchId(_cfCatchId));
+    _cfCatchWorkerListSubject
+        .add(await CfCatchWorkerDao().getListByCfCatchId(_cfCatchId));
   }
 
   _loadCfCatch() async {

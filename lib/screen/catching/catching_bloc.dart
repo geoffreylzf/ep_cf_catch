@@ -1,8 +1,10 @@
 import 'package:ep_cf_catch/bloc/bloc.dart';
 import 'package:ep_cf_catch/db/dao/branch_dao.dart';
+import 'package:ep_cf_catch/db/dao/temp_cf_catch_worker_dao.dart';
 import 'package:ep_cf_catch/mixin/simple_alert_dialog_mixin.dart';
 import 'package:ep_cf_catch/model/table/branch.dart';
 import 'package:ep_cf_catch/model/table/cf_catch.dart';
+import 'package:ep_cf_catch/model/table/temp_cf_catch_worker.dart';
 import 'package:ep_cf_catch/res/string.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,6 +15,7 @@ class CatchingBloc extends BlocBase {
   final _locListSubject = BehaviorSubject<List<Branch>>();
   final _selectedLocationIdSubject = BehaviorSubject<int>();
   final _isScanSubject = BehaviorSubject<bool>.seeded(false);
+  final _tempWorkerListSubject = BehaviorSubject<List<TempCfCatchWorker>>();
 
   Stream<List<Branch>> get locListStream => _locListSubject.stream;
 
@@ -20,11 +23,14 @@ class CatchingBloc extends BlocBase {
 
   Stream<bool> get isScanStream => _isScanSubject.stream;
 
+  Stream<List<TempCfCatchWorker>> get tempWorkerListStream => _tempWorkerListSubject.stream;
+
   @override
   void dispose() {
     _locListSubject.close();
     _selectedLocationIdSubject.close();
     _isScanSubject.close();
+    _tempWorkerListSubject.close();
   }
 
   SimpleAlertDialogMixin _simpleAlertDialogMixin;
@@ -36,7 +42,12 @@ class CatchingBloc extends BlocBase {
   }) {
     _simpleAlertDialogMixin = mixin;
     _companyId = companyId;
+    loadTempWorkerList();
     _loadLocList("");
+  }
+
+  loadTempWorkerList() async {
+    _tempWorkerListSubject.add(await TempCfCatchWorkerDao().getList());
   }
 
   _loadLocList(String filter) async {
@@ -106,7 +117,8 @@ class CatchingBloc extends BlocBase {
       var location = await BranchDao().getLocationById(locationId);
 
       if (location == null) {
-        _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Invalid barcode (location not exist)");
+        _simpleAlertDialogMixin.onDialogMessage(
+            Strings.error, "Invalid barcode (location not exist)");
         return ScanResult(isSuccess: false);
       }
 

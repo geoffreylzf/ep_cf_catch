@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ep_cf_catch/model/api_response.dart';
 import 'package:ep_cf_catch/model/auth.dart';
 import 'package:ep_cf_catch/model/table/branch.dart';
+import 'package:ep_cf_catch/model/table/person_staff.dart';
 import 'package:ep_cf_catch/model/upload_body.dart';
 import 'package:ep_cf_catch/model/upload_result.dart';
 import 'package:ep_cf_catch/model/user.dart';
@@ -45,6 +46,17 @@ class ApiModule {
 
     final response = await http.get(
       await constructUrl(_housekeepingModule) + "&type=branch",
+      headers: {'authorization': basicAuth},
+    );
+    return ApiResponse.fromJson(jsonDecode(validateResponse(response)));
+  }
+
+  Future<ApiResponse<List<PersonStaff>>> getPersonStaff() async {
+    final user = await SharedPreferencesModule().getUser();
+    String basicAuth = user.getCredential();
+
+    final response = await http.get(
+      await constructUrl(_housekeepingModule) + "&type=person_staff",
       headers: {'authorization': basicAuth},
     );
     return ApiResponse.fromJson(jsonDecode(validateResponse(response)));

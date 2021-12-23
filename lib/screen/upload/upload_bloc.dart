@@ -80,6 +80,7 @@ class UploadBloc extends BlocBase {
     final cfCatchList = await CfCatchDao().getByUpload(isUpload: 0);
     await Future.forEach(cfCatchList, (cfCatch) async {
       await (cfCatch as CfCatch).loadDetailList();
+      await (cfCatch as CfCatch).loadWorkerList();
     });
 
     return cfCatchList;

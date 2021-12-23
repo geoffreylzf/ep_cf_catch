@@ -6,6 +6,7 @@ import 'package:ep_cf_catch/screen/catch_history/catch_history_screen.dart';
 import 'package:ep_cf_catch/screen/catch_view/catch_view_screen.dart';
 import 'package:ep_cf_catch/screen/catching/catching_screen.dart';
 import 'package:ep_cf_catch/screen/catching_detail/catching_detail_screen.dart';
+import 'package:ep_cf_catch/screen/catching_worker/catching_worker_screen.dart';
 import 'package:ep_cf_catch/screen/company/company_screen.dart';
 import 'package:ep_cf_catch/screen/home/home_screen.dart';
 import 'package:ep_cf_catch/screen/housekeeping/housekeeping_screen.dart';
@@ -17,11 +18,14 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(App());
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Eng Peng Contract Farmer Catching',
+      navigatorObservers: [routeObserver],
       theme: ThemeData(
         primarySwatch: Colors.blue,
         buttonTheme: ButtonThemeData(
@@ -53,6 +57,7 @@ class App extends StatelessWidget {
           var cfCatch = ModalRoute.of(ctx).settings.arguments as CfCatch;
           return CatchingDetailScreen(cfCatch);
         },
+        CatchingWorkerScreen.route: (ctx) => CatchingWorkerScreen(),
         PrintPreviewScreen.route: (ctx) {
           var printData = ModalRoute.of(ctx).settings.arguments as PrintData;
           return PrintPreviewScreen(printData);

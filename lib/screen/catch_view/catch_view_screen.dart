@@ -1,6 +1,7 @@
 import 'package:ep_cf_catch/model/print_data.dart';
 import 'package:ep_cf_catch/model/table/cf_catch.dart';
 import 'package:ep_cf_catch/model/table/cf_catch_detail.dart';
+import 'package:ep_cf_catch/model/table/cf_catch_worker.dart';
 import 'package:ep_cf_catch/res/string.dart';
 import 'package:ep_cf_catch/screen/catch_view/catch_view_bloc.dart';
 import 'package:ep_cf_catch/screen/print_preview/print_preview_screen.dart';
@@ -178,21 +179,28 @@ class _CatchInfoState extends State<CatchInfo> {
                         },
                       ),
                     ),
-                    Expanded(
-                        child: Text(Strings.recordDate + " : " + recordDate)),
+                    Expanded(child: Text(Strings.recordDate + " : " + recordDate)),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Expanded(
-                        child: Text(Strings.documentNumber + " : " + docNo)),
+                    Expanded(child: Text(Strings.documentNumber + " : " + docNo)),
                     Expanded(child: Text(Strings.truckCode + " : " + truckNo)),
                   ],
                 ),
                 SizedBox(
+                    width: double.infinity, child: Text(Strings.referenceNumber + " : " + refNo)),
+                SizedBox(
                     width: double.infinity,
-                    child: Text(Strings.referenceNumber + " : " + refNo)),
+                    child: StreamBuilder<List<CfCatchWorker>>(
+                        stream: bloc.cfCatchWorkerListStream,
+                        initialData: [],
+                        builder: (context, snapshot) {
+                          return Text(Strings.workers +
+                              " : " +
+                              snapshot.data.map((x) => x.workerName).join(", "));
+                        })),
               ],
             );
           }),
@@ -230,34 +238,22 @@ class _CatchDetailListState extends State<CatchDetailList> {
             return Container(
               color: bgColor,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: Row(
                   children: [
+                    Expanded(flex: 1, child: Text(no.toString(), textAlign: TextAlign.center)),
                     Expanded(
-                        flex: 1,
-                        child:
-                            Text(no.toString(), textAlign: TextAlign.center)),
+                        flex: 1, child: Text(temp.houseNo.toString(), textAlign: TextAlign.center)),
                     Expanded(
-                        flex: 1,
-                        child: Text(temp.houseNo.toString(),
-                            textAlign: TextAlign.center)),
+                        flex: 1, child: Text(temp.age.toString(), textAlign: TextAlign.center)),
                     Expanded(
-                        flex: 1,
-                        child: Text(temp.age.toString(),
-                            textAlign: TextAlign.center)),
-                    Expanded(
-                        flex: 1,
-                        child: Text(temp.qty.toString(),
-                            textAlign: TextAlign.center)),
+                        flex: 1, child: Text(temp.qty.toString(), textAlign: TextAlign.center)),
                     Expanded(
                         flex: 3,
-                        child: Text(temp.weight.toStringAsFixed(2),
-                            textAlign: TextAlign.center)),
+                        child: Text(temp.weight.toStringAsFixed(2), textAlign: TextAlign.center)),
                     Expanded(
                         flex: 1,
-                        child: Text(
-                            "${temp.cageQty.toString()} (${temp.coverQty.toString()})",
+                        child: Text("${temp.cageQty.toString()} (${temp.coverQty.toString()})",
                             textAlign: TextAlign.center)),
                   ],
                 ),

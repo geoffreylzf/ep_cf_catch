@@ -3,10 +3,13 @@ import 'package:ep_cf_catch/bloc/bluetooth_bloc.dart';
 import 'package:ep_cf_catch/db/dao/branch_dao.dart';
 import 'package:ep_cf_catch/db/dao/cf_catch_dao.dart';
 import 'package:ep_cf_catch/db/dao/cf_catch_detail_dao.dart';
+import 'package:ep_cf_catch/db/dao/cf_catch_worker_dao.dart';
 import 'package:ep_cf_catch/db/dao/temp_cf_catch_detail_dao.dart';
+import 'package:ep_cf_catch/db/dao/temp_cf_catch_worker_dao.dart';
 import 'package:ep_cf_catch/mixin/simple_alert_dialog_mixin.dart';
 import 'package:ep_cf_catch/model/table/cf_catch.dart';
 import 'package:ep_cf_catch/model/table/cf_catch_detail.dart';
+import 'package:ep_cf_catch/model/table/cf_catch_worker.dart';
 import 'package:ep_cf_catch/model/table/temp_cf_catch_detail.dart';
 import 'package:ep_cf_catch/model/temp_total.dart';
 import 'package:ep_cf_catch/res/string.dart';
@@ -107,33 +110,27 @@ class CatchingDetailBloc extends BlocBase {
     final cageQty = _cageQtySubject.value;
     final coverQty = _coverQtySubject.value;
     if (house == null) {
-      _simpleAlertDialogMixin.onDialogMessage(
-          Strings.error, "Please enter house");
+      _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please enter house");
       return false;
     }
     if (age == null) {
-      _simpleAlertDialogMixin.onDialogMessage(
-          Strings.error, "Please enter age");
+      _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please enter age");
       return false;
     }
     if (weight == null) {
-      _simpleAlertDialogMixin.onDialogMessage(
-          Strings.error, "Please enter weight");
+      _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please enter weight");
       return false;
     }
     if (qty == null) {
-      _simpleAlertDialogMixin.onDialogMessage(
-          Strings.error, "Please enter quantity");
+      _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please enter quantity");
       return false;
     }
     if (cageQty == null) {
-      _simpleAlertDialogMixin.onDialogMessage(
-          Strings.error, "Please select cage quantity");
+      _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please select cage quantity");
       return false;
     }
     if (coverQty == null) {
-      _simpleAlertDialogMixin.onDialogMessage(
-          Strings.error, "Please select cover quantity");
+      _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please select cover quantity");
       return false;
     }
     final isBt = _isWeighingByBtSubject.value ? 1 : 0;
@@ -182,14 +179,22 @@ class CatchingDetailBloc extends BlocBase {
     );
 
     final cfCatchId = await CfCatchDao().insert(cfCatch);
-    final tempList = await TempCfCatchDetailDao().getList();
-    final detailList = CfCatchDetail.fromTempWithCfCatchId(cfCatchId, tempList);
 
+    //Insert detail from temp, after that delete tmp
+    final tempDetailList = await TempCfCatchDetailDao().getList();
+    final detailList = CfCatchDetail.fromTempWithCfCatchId(cfCatchId, tempDetailList);
     await Future.forEach(detailList, (detail) async {
       await CfCatchDetailDao().insert(detail);
     });
-
     await TempCfCatchDetailDao().deleteAll();
+
+    //Insert worker from temp, after that delete tmp
+    final tempWorkerList = await TempCfCatchWorkerDao().getList();
+    final workerList = CfCatchWorker.fromTempWithCfCatchId(cfCatchId, tempWorkerList);
+    await Future.forEach(workerList, (worker) async {
+      await CfCatchWorkerDao().insert(worker);
+    });
+    await TempCfCatchWorkerDao().deleteAll();
 
     return cfCatchId;
   }

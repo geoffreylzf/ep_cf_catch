@@ -5,6 +5,7 @@ class Strings {
   static const location = "Location";
   static const newCatching = "New Catching";
   static const newCatchingDetail = "New Catching Detail";
+  static const newCatchingWorker = "New Catching Worker";
   static const close = "Close";
   static const start = "Start";
   static const save = "Save";
@@ -18,6 +19,7 @@ class Strings {
   static const coverQuantity = "Cover Quantity";
   static const truckCode = "Truck Code";
   static const referenceNumber = "Reference Number";
+  static const workers = "Workers";
   static const reference = "Reference";
   static const housekeeping = "Housekeeping";
   static const status = "Status";
@@ -31,12 +33,15 @@ class Strings {
   static const catchView = "Catch View";
   static const bluetoothDevices = "Bluetooth Devices";
   static const retrieveHousekeeping = "Retrieve Housekeeping";
+  static const retrieveLatestStaff = "Retrieve Latest Staff";
+  static const addWorker = "Add Worker";
   static const localConnectOfficeWifi = "Local (Connect Office Wi-Fi)";
   static const signOut = "Sign Out";
   static const login = "Login";
   static const logout = "Logout";
   static const upload = "Upload";
   static const search = "Search";
+  static const workerName = "Worker Name";
   static const pendingUpload = "Pending Upload";
   static const username = "Username";
   static const password = "Password";

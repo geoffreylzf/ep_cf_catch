@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 
 import 'db_sql.dart';
 
-const _version = 1;
+const _version = 2;
 const _dbName = "ep_cf_ca.db";
 
 class Db {
@@ -31,11 +31,20 @@ class Db {
       onCreate: (Database db, int version) async {
         await db.execute(DbSql.createBranchTable);
         await db.execute(DbSql.createTempCfCatchDetailTable);
-
         await db.execute(DbSql.createCfCatchTable);
         await db.execute(DbSql.createCfCatchDetailTable);
-
         await db.execute(DbSql.createLogTable);
+
+        await db.execute(DbSql.createCfCatchWorkerTable);
+        await db.execute(DbSql.createTempCfCatchWorkerTable);
+        await db.execute(DbSql.createPersonStaffTable);
+      },
+      onUpgrade: (Database db, int oldVersion, int newVersion) async {
+        if (oldVersion <= 1) {
+          await db.execute(DbSql.createCfCatchWorkerTable);
+          await db.execute(DbSql.createTempCfCatchWorkerTable);
+          await db.execute(DbSql.createPersonStaffTable);
+        }
       },
     );
   }

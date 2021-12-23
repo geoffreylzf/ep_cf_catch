@@ -55,4 +55,26 @@ class DbSql {
       `remark` TEXT,
       `timestamp` TIMESTAMP);
       """;
+
+  static final createCfCatchWorkerTable = """
+      CREATE TABLE `cf_catch_worker` (
+      `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+      `cf_catch_id` INTEGER NOT NULL,
+      `person_staff_id` INTEGER,
+      `worker_name` TEXT);
+      """;
+
+  static final createTempCfCatchWorkerTable = """
+      CREATE TABLE `temp_cf_catch_worker` (
+      `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+      `person_staff_id` INTEGER,
+      `worker_name` TEXT);
+      """;
+
+  static final createPersonStaffTable = """
+      CREATE TABLE `person_staff` (
+      `id` INTEGER PRIMARY KEY,
+      `person_code` TEXT,
+      `person_name` TEXT);
+      """;
 }

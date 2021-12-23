@@ -1,5 +1,7 @@
 import 'package:ep_cf_catch/db/dao/cf_catch_detail_dao.dart';
+import 'package:ep_cf_catch/db/dao/cf_catch_worker_dao.dart';
 import 'package:ep_cf_catch/model/table/cf_catch_detail.dart';
+import 'package:ep_cf_catch/model/table/cf_catch_worker.dart';
 import 'package:ep_cf_catch/util/date_time_util.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +10,7 @@ class CfCatch {
   String recordDate, docNo, truckNo, refNo, uuid, timestamp;
 
   List<CfCatchDetail> cfCatchDetailList = [];
+  List<CfCatchWorker> cfCatchWorkerList = [];
 
   CfCatch({
     this.id,
@@ -23,6 +26,7 @@ class CfCatch {
     this.isUpload,
     this.timestamp,
     this.cfCatchDetailList,
+    this.cfCatchWorkerList,
   });
 
   CfCatch.db({
@@ -50,8 +54,12 @@ class CfCatch {
       isDelete: json["is_delete"],
       timestamp: json["timestamp"],
       cfCatchDetailList: json["cf_catch_detail_list"] != null
-          ? List<CfCatchDetail>.from(json["cf_catch_detail_list"]
-              .map((dt) => CfCatchDetail.fromJson(dt)))
+          ? List<CfCatchDetail>.from(
+              json["cf_catch_detail_list"].map((dt) => CfCatchDetail.fromJson(dt)))
+          : [],
+      cfCatchWorkerList: json["cf_catch_worker_list"] != null
+          ? List<CfCatchWorker>.from(
+              json["cf_catch_worker_list"].map((dt) => CfCatchWorker.fromJson(dt)))
           : [],
     );
   }
@@ -69,14 +77,16 @@ class CfCatch {
         "is_upload": isUpload,
         "is_delete": isDelete,
         "timestamp": timestamp,
-        "cf_catch_detail_list":
-            cfCatchDetailList != null && cfCatchDetailList.length > 0
-                ? List<dynamic>.from(cfCatchDetailList.map((x) => x.toJson()))
-                : [],
+        "cf_catch_detail_list": cfCatchDetailList != null && cfCatchDetailList.length > 0
+            ? List<dynamic>.from(cfCatchDetailList.map((x) => x.toJson()))
+            : [],
+        "cf_catch_worker_list": cfCatchWorkerList != null && cfCatchWorkerList.length > 0
+            ? List<dynamic>.from(cfCatchWorkerList.map((x) => x.toJson()))
+            : [],
       };
 
   Map<String, dynamic> toDbJson() {
-    return toJson()..remove("cf_catch_detail_list");
+    return toJson()..remove("cf_catch_detail_list")..remove("cf_catch_worker_list");
   }
 
   bool isDeleted() {
@@ -89,6 +99,10 @@ class CfCatch {
 
   loadDetailList() async {
     cfCatchDetailList = await CfCatchDetailDao().getListByCfCatchId(id);
+  }
+
+  loadWorkerList() async {
+    cfCatchWorkerList = await CfCatchWorkerDao().getListByCfCatchId(id);
   }
 
   setCurrentTimestamp() {
