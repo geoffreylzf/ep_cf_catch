@@ -1,7 +1,17 @@
 name: ep_cf_catch
 description: A new Flutter application.
 
-version: 2.0.0+9
+version: 2.1.0+10
+
+#2.1.0+10 20211227 add worker module
+#2.0.0+9 remove google play
+#1.1.2+8 change global url
+#1.1.1+7 prevent catching tab from refresh when switching
+#1.1.0+6 add scan function
+#1.0.4+5 debug print
+#1.0.3+4 add age
+#1.0.2+3 adjust layout2
+#1.0.1+2 adjust layout
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -31,11 +41,3 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-#2.0.0+9 remove google play
-#1.1.2+8 change global url
-#1.1.1+7 prevent catching tab from refresh when switching
-#1.1.0+6 add scan function
-#1.0.4+5 debug print
-#1.0.3+4 add age
-#1.0.2+3 adjust layout2
-#1.0.1+2 adjust layout
