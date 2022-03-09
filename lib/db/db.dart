@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 
 import 'db_sql.dart';
 
-const _version = 2;
+const _version = 3;
 const _dbName = "ep_cf_ca.db";
 
 class Db {
@@ -44,6 +44,11 @@ class Db {
           await db.execute(DbSql.createCfCatchWorkerTable);
           await db.execute(DbSql.createTempCfCatchWorkerTable);
           await db.execute(DbSql.createPersonStaffTable);
+        }
+
+        if (oldVersion <= 2) {
+          await db.execute("ALTER TABLE cf_catch_worker ADD COLUMN is_farm_worker INTEGER DEFAULT 0");
+          await db.execute("ALTER TABLE temp_cf_catch_worker ADD COLUMN is_farm_worker INTEGER DEFAULT 0");
         }
       },
     );

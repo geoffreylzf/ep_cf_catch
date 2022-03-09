@@ -61,14 +61,16 @@ class DbSql {
       `id` INTEGER PRIMARY KEY AUTOINCREMENT,
       `cf_catch_id` INTEGER NOT NULL,
       `person_staff_id` INTEGER,
-      `worker_name` TEXT);
+      `worker_name` TEXT,
+      `is_farm_worker` INTEGER);
       """;
 
   static final createTempCfCatchWorkerTable = """
       CREATE TABLE `temp_cf_catch_worker` (
       `id` INTEGER PRIMARY KEY AUTOINCREMENT,
       `person_staff_id` INTEGER,
-      `worker_name` TEXT);
+      `worker_name` TEXT,
+      `is_farm_worker` INTEGER);
       """;
 
   static final createPersonStaffTable = """

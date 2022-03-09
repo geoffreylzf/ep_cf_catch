@@ -13,6 +13,7 @@ class CatchingWorkerBloc extends BlocBase {
   final _isFetchingSubject = BehaviorSubject<bool>();
   final _personStaffListSubject = BehaviorSubject<List<PersonStaff>>();
   final _tempListSubject = BehaviorSubject<List<TempCfCatchWorker>>();
+  final _isFarmWorkerSubject = BehaviorSubject<bool>.seeded(false);
 
   Stream<List<PersonStaff>> get personStaffListStream => _personStaffListSubject.stream;
 
@@ -20,11 +21,14 @@ class CatchingWorkerBloc extends BlocBase {
 
   Stream<List<TempCfCatchWorker>> get tempListStream => _tempListSubject.stream;
 
+  Stream<bool> get isFarmWorkerStream => _isFarmWorkerSubject.stream;
+
   @override
   void dispose() {
     _isFetchingSubject.close();
     _personStaffListSubject.close();
     _tempListSubject.close();
+    _isFarmWorkerSubject.close();
   }
 
   SimpleAlertDialogMixin _simpleAlertDialogMixin;
@@ -69,11 +73,17 @@ class CatchingWorkerBloc extends BlocBase {
     }
   }
 
+  toggleIsFarmWorker() {
+    _isFarmWorkerSubject.add(!_isFarmWorkerSubject.value);
+  }
+
   Future<bool> insertWorker({int personStaffId, String workerName}) async {
     if (personStaffId == null && (workerName == null || workerName.trim() == '')) {
       _simpleAlertDialogMixin.onDialogMessage(Strings.error, "Please enter worker name");
       return false;
     }
+
+    int isFarmWorker = 0;
 
     if (personStaffId != null) {
       final ps = _personStaffListSubject.value.firstWhere(
@@ -89,15 +99,22 @@ class CatchingWorkerBloc extends BlocBase {
       }
 
       workerName = ps.personName;
+    } else {
+      isFarmWorker = _isFarmWorkerSubject.value ? 1 : 0;
     }
 
     final temp = TempCfCatchWorker(
       personStaffId: personStaffId,
       workerName: workerName,
+      isFarmWorker: isFarmWorker,
     );
 
     await TempCfCatchWorkerDao().insert(temp);
     await _loadTempList();
+
+    if (_isFarmWorkerSubject.value) {
+      _isFarmWorkerSubject.value = false;
+    }
 
     return true;
   }

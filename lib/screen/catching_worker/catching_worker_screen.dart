@@ -209,6 +209,36 @@ class _ManualEnterWorkerPanelState extends State<ManualEnterWorkerPanel> {
               contentPadding: const EdgeInsets.all(8.0),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                StreamBuilder<bool>(
+                    stream: bloc.isFarmWorkerStream,
+                    initialData: false,
+                    builder: (context, snapshot) {
+                      return Checkbox(
+                        value: snapshot.data,
+                        onChanged: (bool _) {
+                          bloc.toggleIsFarmWorker();
+                        },
+                      );
+                    }),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: InkWell(
+                    onTap: () => bloc.toggleIsFarmWorker(),
+                    child: Text(
+                      "Farm Worker (Not Catching Team)",
+                      overflow: TextOverflow.clip,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           SizedBox(
             width: double.infinity,
             child: RaisedButton.icon(
@@ -259,9 +289,9 @@ class _WorkerListState extends State<WorkerList> {
                   itemBuilder: (ctx, position) {
                     final temp = list[position];
 
-                    var hint ="";
-                    if (temp.personStaffId == null){
-                      hint= "* ";
+                    var hint = "";
+                    if (temp.personStaffId == null) {
+                      hint = "* ";
                     }
 
                     return Dismissible(
@@ -303,6 +333,9 @@ class _WorkerListState extends State<WorkerList> {
                       },
                       child: ListTile(
                         title: Text(hint + temp.workerName),
+                        subtitle: temp.isFarmWorker == 1
+                            ? Text("Farm Worker", style: TextStyle(color: Colors.red))
+                            : null,
                       ),
                     );
                   },

@@ -1,7 +1,7 @@
 import 'package:ep_cf_catch/model/table/temp_cf_catch_worker.dart';
 
 class CfCatchWorker {
-  int id, cfCatchId, personStaffId;
+  int id, cfCatchId, personStaffId, isFarmWorker;
   String workerName;
 
   CfCatchWorker({
@@ -9,12 +9,14 @@ class CfCatchWorker {
     this.cfCatchId,
     this.personStaffId,
     this.workerName,
+    this.isFarmWorker,
   });
 
   CfCatchWorker.db({
     this.cfCatchId,
     this.personStaffId,
     this.workerName,
+    this.isFarmWorker,
   });
 
   factory CfCatchWorker.fromJson(Map<String, dynamic> json) => CfCatchWorker(
@@ -22,6 +24,7 @@ class CfCatchWorker {
         cfCatchId: json["cf_catch_id"],
         personStaffId: json["person_staff_id"],
         workerName: json["worker_name"],
+        isFarmWorker: json["is_farm_worker"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +32,7 @@ class CfCatchWorker {
         "cf_catch_id": cfCatchId,
         "person_staff_id": personStaffId,
         "worker_name": workerName,
+        "is_farm_worker": isFarmWorker,
       };
 
   static List<CfCatchWorker> fromTempWithCfCatchId(
@@ -40,6 +44,7 @@ class CfCatchWorker {
         cfCatchId: cfCatchId,
         personStaffId: temp.personStaffId,
         workerName: temp.workerName,
+        isFarmWorker: temp.isFarmWorker,
       ));
     });
 

@@ -243,7 +243,10 @@ class _WorkerListState extends State<WorkerList> {
                       }
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(hint + temp.workerName),
+                        child: Text(
+                          hint + temp.workerName,
+                          style: TextStyle(color: temp.isFarmWorker == 1 ? Colors.red : null),
+                        ),
                       );
                     });
               }),
