@@ -103,8 +103,9 @@ class _CatchViewScreenState extends State<CatchViewScreen> {
                 message: "Deleted data cannot be print.",
               ));
     } else {
-      var text = await PrintUtil().generateCfCatchReceipt(widget.cfCatchId);
-      var printData = PrintData(text: text);
+      final text = await PrintUtil().generateCfCatchReceipt(widget.cfCatchId);
+      final qrCodeText = await PrintUtil().generateCfCatchQrCodeText(widget.cfCatchId);
+      final printData = PrintData(text: text, barcode: qrCodeText);
       Navigator.of(context).pushNamed(
         PrintPreviewScreen.route,
         arguments: printData,

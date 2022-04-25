@@ -252,7 +252,8 @@ class _CatchSummaryState extends State<CatchSummary> {
           vcb: () async {
             final cfCatchId = await bloc.saveCatch();
             final text = await PrintUtil().generateCfCatchReceipt(cfCatchId);
-            final printData = PrintData(text: text);
+            final qrCodeText = await PrintUtil().generateCfCatchQrCodeText(cfCatchId);
+            final printData = PrintData(text: text, barcode: qrCodeText);
             Navigator.of(mainContext).pop();
             Navigator.of(mainContext)
                 .pushReplacementNamed(PrintPreviewScreen.route, arguments: printData);

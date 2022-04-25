@@ -39,6 +39,39 @@ class CfCatchDetailDao {
     return res.isNotEmpty ? res.map((c) => c["house_no"] as int).toList() : [];
   }
 
+  Future<int> getTtlQtyByCfCatchId(int cfCatchId) async {
+    final db = await Db().database;
+    final res = await db.query(
+      _table,
+      columns: ["SUM(qty) as qty"],
+      where: "cf_catch_id = ?",
+      whereArgs: [cfCatchId],
+    );
+    return res.isNotEmpty ? res.first['qty'] : 0;
+  }
+
+  Future<int> getTtlCageQtyByCfCatchId(int cfCatchId) async {
+    final db = await Db().database;
+    final res = await db.query(
+      _table,
+      columns: ["SUM(cage_qty) as cage_qty"],
+      where: "cf_catch_id = ?",
+      whereArgs: [cfCatchId],
+    );
+    return res.isNotEmpty ? res.first['cage_qty'] : 0;
+  }
+
+  Future<int> getTtlCoverQtyByCfCatchId(int cfCatchId) async {
+    final db = await Db().database;
+    final res = await db.query(
+      _table,
+      columns: ["SUM(cover_qty) as cover_qty"],
+      where: "cf_catch_id = ?",
+      whereArgs: [cfCatchId],
+    );
+    return res.isNotEmpty ? res.first['cover_qty'] : 0;
+  }
+
   Future<List<CfCatchDetail>> getListByCfCatchIdHouseNo(int cfCatchId, int houseNo) async {
     final db = await Db().database;
     final res = await db.query(

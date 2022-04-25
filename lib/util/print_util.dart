@@ -44,12 +44,13 @@ class PrintUtil {
     var ttlCover = 0;
 
     await Future.forEach(houseList, (house) async {
-
       final ageList = await CfCatchDetailDao().getAgeListByCfCatchIdHouseNo(cfCatchId, house);
 
-      s += _fmtLeftLine(" Kdg#: ${location.branchCode} $house (Age : ${ageList.map((i)=> i.toString()).join(",")})");
+      s += _fmtLeftLine(
+          " Kdg#: ${location.branchCode} $house (Age : ${ageList.map((i) => i.toString()).join(",")})");
       s += _fmtLeftLine(_halfLineSeparator);
-      s += _fmtLeftLine(_halfLine("  #    Weight  Qty  C ") + "|" + _halfLine("  #    Weight  Qty  C "));
+      s += _fmtLeftLine(
+          _halfLine("  #    Weight  Qty  C ") + "|" + _halfLine("  #    Weight  Qty  C "));
 
       final detailList = await CfCatchDetailDao().getListByCfCatchIdHouseNo(cfCatchId, house);
 
@@ -96,13 +97,16 @@ class PrintUtil {
         }
       }
       s += _fmtLeftLine(_halfLine() + "|" + _halfLine());
-      s += _fmtLeftLine(_halfLine(" WGT: ${ttlHouseWeight.toStringAsFixed(2)} Kg") + "|" + _halfLine(" QTY: $ttlHouseQty heads"));
+      s += _fmtLeftLine(_halfLine(" WGT: ${ttlHouseWeight.toStringAsFixed(2)} Kg") +
+          "|" +
+          _halfLine(" QTY: $ttlHouseQty heads"));
       s += _fmtLeftLine(_halfLineSeparator);
     });
 
     s += _fmtLeftLine();
     s += _fmtLeftLine("Jumlah Ayam:           " + _halfRightLine(ttlQty.toString() + " heads"));
-    s += _fmtLeftLine("Jumlah Berat Kasar:    " + _halfRightLine(ttlWeight.toStringAsFixed(2) + " Kg   "));
+    s += _fmtLeftLine(
+        "Jumlah Berat Kasar:    " + _halfRightLine(ttlWeight.toStringAsFixed(2) + " Kg   "));
 
     var ttlNoCover = ttlCage - ttlCover;
     var ttlCageWithCoverWeight = ttlCover * _cageWithCoverWeight;
@@ -111,20 +115,25 @@ class PrintUtil {
 
     s += _fmtLeftLine();
     s += _fmtLeftLine("Jumlah Kurungan:       " + _halfRightLine(ttlCage.toString() + " qty  "));
-    s += _fmtLeftLine("Ada Tutupan:           " + _halfRightLine(ttlCageWithCoverWeight.toStringAsFixed(2) + " kg   "));
-    s += _fmtLeftLine("Tanpa Tutupan:         " + _halfRightLine(ttlCageWithoutCoverWeight.toStringAsFixed(2) + " kg   "));
-    s += _fmtLeftLine("Jumlah Berat Kurungan: " + _halfRightLine(ttlCageWeight.toStringAsFixed(2) + " kg   "));
+    s += _fmtLeftLine("Ada Tutupan:           " +
+        _halfRightLine(ttlCageWithCoverWeight.toStringAsFixed(2) + " kg   "));
+    s += _fmtLeftLine("Tanpa Tutupan:         " +
+        _halfRightLine(ttlCageWithoutCoverWeight.toStringAsFixed(2) + " kg   "));
+    s += _fmtLeftLine(
+        "Jumlah Berat Kurungan: " + _halfRightLine(ttlCageWeight.toStringAsFixed(2) + " kg   "));
 
     var netWeight = ttlWeight - ttlCageWeight;
     var avgWeight = netWeight / ttlQty;
 
     s += _fmtLeftLine();
-    s += _fmtLeftLine("Jumlah Berat Bersih:   " + _halfRightLine(netWeight.toStringAsFixed(2) + " kg   "));
-    s += _fmtLeftLine("Purata Seekor:         " + _halfRightLine(avgWeight.toStringAsFixed(2) + " kg   "));
+    s += _fmtLeftLine(
+        "Jumlah Berat Bersih:   " + _halfRightLine(netWeight.toStringAsFixed(2) + " kg   "));
+    s += _fmtLeftLine(
+        "Purata Seekor:         " + _halfRightLine(avgWeight.toStringAsFixed(2) + " kg   "));
 
     s += _fmtLeftLine();
 
-     s += _fmtLeftLine("Printed by: " + user.username);
+    s += _fmtLeftLine("Printed by: " + user.username);
 
     s += _fmtLeftLine("Date: " + DateTimeUtil().getCurrentDate());
     s += _fmtLeftLine("Time: " + DateTimeUtil().getCurrentTime());
@@ -177,5 +186,30 @@ class PrintUtil {
     } else {
       return text.padLeft(_halfLineLimit);
     }
+  }
+
+  Future<String> generateCfCatchQrCodeText(int cfCatchId) async {
+
+    final cfCatch = await CfCatchDao().getById(cfCatchId);
+    var s = "v1";
+    s += "|" + cfCatch.companyId.toString();
+    s += "|" + cfCatch.locationId.toString();
+    s += "|" + cfCatch.recordDate;
+    s += "|" + cfCatch.docNo;
+    s += "|PL|A|" + cfCatch.truckNo;
+    s += "|" + cfCatch.uuid;
+
+    final houseList = await CfCatchDetailDao().getHouseListByCfCatchId(cfCatchId);
+    s += "|" + houseList.map((e) => e.toString()).join(",");
+
+    final ttQty = await CfCatchDetailDao().getTtlQtyByCfCatchId(cfCatchId);
+    final ttCageQty = await CfCatchDetailDao().getTtlCageQtyByCfCatchId(cfCatchId);
+    final ttCoverQty = await CfCatchDetailDao().getTtlCoverQtyByCfCatchId(cfCatchId);
+
+    s += "|" + ttQty.toString();
+    s += "|" + ttCageQty.toString();
+    s += "|" + ttCoverQty.toString();
+
+    return s;
   }
 }

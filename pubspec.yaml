@@ -1,8 +1,9 @@
 name: ep_cf_catch
 description: A new Flutter application.
 
-version: 2.1.1+11
+version: 2.2.0+12
 
+#2.2.0+12 add qr code to receipt for slaughter house scan
 #2.1.1+11 add is_farm_worker to worker table
 #2.1.0+10 20211227 add worker module
 #2.0.0+9 remove google play
